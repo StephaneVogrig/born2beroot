@@ -1,0 +1,118 @@
+demande 30.8 obtenu 33.1
+donc mulitplier par 33.1 / 30.8 = 1.074675325
+
+Dans VirtualBox 30.8GB
+
+500M	=>	524.288                525
+
+10G 	=> 10.74675325		root	10.75
+2.3G	=> 2.471753247		swap	 2.47
+5G  	=>  5.373376623		home	 5.37
+3G		=>	3.2240025975	var		 3.22
+3G		=>	3.2240025975	srv		 3.22
+3G		=>	3.2240025975	tmp		 3.22
+4G		=>  4.2787013		var-log	 4.28
+
+
+Hostname : svogrig42
+Root password : q1w2e3r4t5y6
+
+Full name : stephane vogrig
+Username for account : svogrig
+Password user : 1mot2passe
+
+Encryption passphrase : aurore.marion.stephane.ecole42.
+
+- The Hostname of virtual machine must be login ending with 42 (svogrig42)
+
+- a user with my login as username (svogrig)
+
+- install sudo
+- configure sudo following strict rules
+    - Authentication using sudo has to be limited to 3 attempts in the event
+      of an incorrect password.
+    - A custom message of your choice has to be displayed if an error due
+      to a wrong password occurs when using sudo.
+    - The log file has to be saved in the /var/log/sudo/ folder.
+    - Each action using sudo has to be archived, both inputs and outputs.
+    - The TTY mode has to be enabled for security reasons.
+    - the paths that can be used by sudo must be restricted.
+
+- A SSH service will be running on port 4242 only
+- It must not be possible to connect using ssh as root
+
+- Setup KDump
+- SELinux must be running at startup
+- SELinux configuration must be adapted to the project
+
+- AppArmor must be running at startup
+
+
+- configure os with UFW firewall
+- leave only port 4242 open
+
+- implement a strong password policy
+    - password has to expire every 30 days
+    - minimum number of days allowed before the modification of a password 
+      is set to 2
+    - the user has to receive a warning message 7 days before their password expire
+    - password must be at least 10 characters long
+    - password must contain uppercase letter, lowercase letter,  and a number
+    - password must not contain more than 3 consecutive identical characters
+    - password must not include the name of user
+    - password mast have at least 7 charcaters that are not part
+      of the former password
+    
+- root password must comply with the policy except the last.
+
+- change all (including root) the passwords of the account present,
+  after setting up configuration files.
+  
+
+
+- svogrig has to belong the user42 and sudo groups
+
+- create a script called monitoring.sh (developed in bash).
+- at server startup script display informations on all terminal every 10 mn
+    - architecture of os and its kernel version
+    - number of physical processors
+    - number of virtualArchitecture processors
+    - current available ram and its utilisation rate as percentage
+    - current available memory and its utilisation rate as percentage
+    - current processor utilisation rate as percentage
+    - date and time of last reboot
+    - wheter LVM is active or not
+    - number of active connection
+    - Number of users using the server
+    - IPv4 adress of the server
+    - MAC adress of the server
+    - number of command executed with sudo program
+- the banner is optional
+- no error must be visible
+
+Knowedge nedded
+- some question about the operating system I choose
+- the difference between aptitude and apt
+- what is SELinux
+- what is AppArmor
+- setting up a new account by ssh
+- modify the hostname
+- create a new user and assign it to a group
+    adduser ? addgroup ?
+- explain how the script works
+- interupt script without modifying it. (cron)
+
+
+
+
+sudo = super user do
+    - mot de passe memorise pendant 15 mn
+    - sudo -k (termine session avant 15 mn)
+    
+/etc/passwd
+/etc/group
+/etc/shadow
+
+
+
+

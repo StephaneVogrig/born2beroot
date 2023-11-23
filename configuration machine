@@ -1,0 +1,26 @@
+apres install et partitionnement
+
+su -ls 
+apt-get update -y
+apt-get upgrade -y
+
+
+/* installation de sudo */
+apt install sudo
+usermod -aG sudo svogrig
+getent group sudo
+sudo whoami
+
+sudo visudo
+// ajouter a la fin du fichier
+svogrig ALL=(ALL) ALL
+
+/* installation de ssh */
+
+apt install openssh-server
+systemctl status sshd
+ss -lntp | grep "22"
+// changement port
+nano /etc/ssh/sshd_config
+// remplacer    #Port 22
+// par          Port 4242

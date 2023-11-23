@@ -1,3 +1,7 @@
+# Installing debian
+## Partitionning (for bonus)
+Choose Manual
+
 Value for manual insatllation
 
 500M	=>	524.288      boot    525  
