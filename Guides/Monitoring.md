@@ -79,6 +79,7 @@ sudo_used=$(grep COMMAND /var/log/sudo/sudo.log | wc -l)
 - [wc](https://www.man7.org/linux/man-pages/man1/wc.1.html)
 - [ip](https://www.man7.org/linux/man-pages/man8/ip.8.html)
 - [ss](https://www.man7.org/linux/man-pages/man8/ss.8.html), [cyberciti.biz](https://www.cyberciti.biz/tips/linux-investigate-sockets-network-connections.html)
+- [wall](https://www.man7.org/linux/man-pages/man1/wall.1.html)
 
 #### Other
 - [mcombeau](https://github.com/mcombeau/Born2beroot/blob/main/monitoring.sh)

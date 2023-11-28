@@ -1,5 +1,7 @@
 #!/bin/bash
 
+date=$(date)
+
 # Hardware
 
 archi=$(lscpu | grep Architecture | awk '{print $2}')
@@ -39,35 +41,40 @@ sudo_users=$(getent group sudo | cut -d: -f4)
 sudo_used=$(grep COMMAND /var/log/sudo/sudo.log | wc -l)
 
 
-echo ""
-echo "- Hardware ------------------------------------------------------------------"
-echo ""
-echo "    architecture       : $archi"
-echo "    Physical CPUs      : $proc_phys"
-echo "    Virtual CPUs       : $proc_virt"
-echo "    CPU usage          : $cpu_use"
-echo "    RAM usage          : $ram_used/$ram_total Mo ($ram_percent)"
-echo "    Disk usage         : $disk_used/$disk_total Go ($disk_percent)"
-echo "    LVM use            : $lvm_use"
-echo "    Last boot          : $last_boot"
-echo ""
-echo "- System --------------------------------------------------------------------"
-echo ""
-echo "    Operating system   : $os"
-echo "    kernel release     : $kernel_r"
-echo "    Kernel version     : $kernel_v"
-echo ""
-echo "- Network -------------------------------------------------------------------"
-echo ""
-echo "    Hostname           : $hostname"
-echo "    MAC adress         : $MAC"
-echo "    IPV4 adress        : $IPV4"
-echo "    TCP connection     : $tcp"
-echo "    Users logged       : $users_logged"
-echo ""
-echo "- Sudo ----------------------------------------------------------------------"
-echo ""
-echo "    Users              : $sudo_users"
-echo "    Sudo commands used : $sudo_used"
-echo ""
-echo "-----------------------------------------------------------------------------"
+wall --nobanner "
+
+$date
+
+- Hardware ------------------------------------------------------------------
+
+    architecture       : $archi
+    Physical CPUs      : $proc_phys
+    Virtual CPUs       : $proc_virt
+    CPU usage          : $cpu_use
+    RAM usage          : $ram_used/$ram_total Mo ($ram_percent)
+    Disk usage         : $disk_used/$disk_total Go ($disk_percent)
+    LVM use            : $lvm_use
+    Last boot          : $last_boot
+
+- System --------------------------------------------------------------------
+
+    Operating system   : $os
+    kernel release     : $kernel_r
+    Kernel version     : $kernel_v
+
+- Network -------------------------------------------------------------------
+
+    Hostname           : $hostname
+    MAC adress         : $MAC
+    IPV4 adress        : $IPV4
+    TCP connection     : $tcp
+    Users logged       : $users_logged
+
+- Sudo ----------------------------------------------------------------------
+
+    Users              : $sudo_users
+    Sudo commands used : $sudo_used
+
+-----------------------------------------------------------------------------"
+
+
