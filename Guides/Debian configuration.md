@@ -15,7 +15,8 @@ apt install sudo -y
 ```
 If user svogrig does not exist create user svogrig
 ```bash
-
+useradd svogrig
+passwd svogrig
 ```
 Add user to group sudo  
 ```bash
@@ -212,3 +213,27 @@ retry = 3
 \# Enabled if the option is present.  
 enforce_for_root  
 /...
+
+Set timezone to Paris with [timedatectl](https://www.malekal.com/commande-timedatectl-changer-heure-date-fuseau-horaire-linux/)
+```bash
+sudo timedatectl set-timezone Europe/Paris
+```
+
+## [cron](https://www.man7.org/linux/man-pages/man8/cron.8.html) setup
+
+#### Install
+```bash
+sudo apt install cron
+sudo systemctl enable cron
+```
+#### Configure cron
+```bash
+sudo crontab -u root -e
+```
+Add a the end of file
+>*/10 * * * * sh /root/monitoring.sh
+
+Check root's scheduled cron job
+```bash
+sudo crontab -u root -l
+```

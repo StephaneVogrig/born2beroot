@@ -1,0 +1,8 @@
+
+
+## Failed to send host log message
+To fix the error message that appears at VM boot (graphics controller error):   
+"[drm:vmw_host_log [vmwgfx]] *ERROR* Failed to send host log message"
+- Shut down VM
+- Open VirtualBox
+- Go to VM settings `Display` -> `Screen` -> `Graphics Controller` -> `VBoxVGA`
