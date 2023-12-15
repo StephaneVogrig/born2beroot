@@ -219,7 +219,162 @@ Set timezone to Paris with [timedatectl](https://www.malekal.com/commande-timeda
 sudo timedatectl set-timezone Europe/Paris
 ```
 
-## [cron](https://www.man7.org/linux/man-pages/man8/cron.8.html) setup
+## Monitoring setup
+### Create script
+Create file
+```
+touch /root/monitoring.sh
+```
+Add in file
+```bash
+#!/bin/bash
+
+date=$(date)
+
+# Hardware
+
+archi=$(lscpu | grep Architecture | awk '{print $2}')
+proc_phys=$(lscpu | grep '^CPU(s):' | awk '{print $2}')
+proc_virt=$(nproc --all)
+cpu_use=$(top -bn1 | grep '%Cpu(s)' | awk '{printf("%.1f %%", $2 + $6)}')
+
+ram_total=$(free --si --mega | grep Mem | awk '{print $2}')
+ram_used=$(free --si --mega | grep Mem | awk '{print $3}')
+ram_percent=$(free --si --mega |grep Mem | awk '{printf("%.2d %%", 100 * $3 / $2)}')
+
+disk_total=$(df --si --total | grep total | awk '{print $2}')
+disk_used=$(df --si --total | grep total | awk '{print $3}')
+disk_percent=$(df --total | grep total | awk '{print $5}')
+
+lvm_nbr=$(lsblk | grep lvm | wc -l)
+lvm_use=$(if [ $lvm_nbr -gt 0 ]; then echo no; else echo yes; fi)
+last_boot=$(who --boot | awk '{print $3 " " $4}')
+
+# system
+
+os=$(uname --operating-system)
+kernel_r=$(uname --kernel-release)
+kernel_v=$(uname --kernel-version)
+
+# network
+
+hostname=$(uname --nodename)
+MAC=$(ip link show | grep 'link/ether' | awk '{print $2}')
+IPV4=$(hostname -I)
+tcp=$(ss -t | grep ESTAB | wc -l)
+users_logged=$(who --users | wc -l)
+
+# sudo
+
+sudo_users=$(getent group sudo | cut -d: -f4)
+sudo_used=$(grep COMMAND /var/log/sudo/sudo.log | wc -l)
+
+
+wall --nobanner "
+
+$date
+
+- Hardware ------------------------------------------------------------------
+
+    architecture       : $archi
+    Physical CPUs      : $proc_phys
+    Virtual CPUs       : $proc_virt
+    CPU usage          : $cpu_use
+    RAM usage          : $ram_used/$ram_total Mo ($ram_percent)
+    Disk usage         : $disk_used/$disk_total Go ($disk_percent)
+    LVM use            : $lvm_use
+    Last boot          : $last_boot
+
+- System --------------------------------------------------------------------
+
+    Operating system   : $os
+    kernel release     : $kernel_r
+    Kernel version     : $kernel_v
+
+- Network -------------------------------------------------------------------
+
+    Hostname           : $hostname
+    MAC adress         : $MAC
+    IPV4 adress        : $IPV4
+    TCP connection     : $tcp
+    Users logged       : $users_logged
+
+- Sudo ----------------------------------------------------------------------
+
+    Users              : $sudo_users
+    Sudo commands used : $sudo_used
+
+-----------------------------------------------------------------------------"
+```
+
+### Timer by systemd methode
+For systemd services see [systemd.service](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html)
+
+- Create a script
+create file  
+```
+touch /root/monitoring_display.sh
+```
+Add in file
+```
+#!/bin/bash
+usuers=$(who | awk '{print $2}')
+for user in users; do
+	bash /root/monitoring.sh > /dev/$user
+done
+```
+- create a timer  
+create file  
+```
+touch /etc/systemd/system/monitoring.timer
+```
+write in the file  
+see example : [systemd/Timers](https://wiki.archlinux.org/title/Systemd/Timers)
+```
+[Unit]
+Description=Display monitoring every 10 minutes
+
+[Timer]
+OnUnitActiveSec=10m
+Unit=monitoring.service
+
+[Install]
+WantedBy=timers.target
+```
+- create display service
+create file
+```
+touch /etc/systemd/system/monitoring.service
+```
+write in the file
+```
+[Unit]
+Description=Display monitoring to all connected user
+
+[Service]
+Type=simple
+ExecStart=bash /root/monitoring.sh
+
+[Install]
+WantedBy=multi-user.target
+```
+- Enable service
+```bash
+systemctl enable monitoring.timer
+systemctl enable monitoring.service
+```
+- start service
+```bash
+systemctl start monitoring.timer
+systemctl start monitoring.service
+```
+- check services
+```bash
+systemctl status monitoring.timer
+systemctl status monitoring.service
+```
+
+### Timer by [cron](https://www.man7.org/linux/man-pages/man8/cron.8.html) methode
 
 #### Install
 ```bash

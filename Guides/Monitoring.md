@@ -2,22 +2,22 @@
 [Apprendre à rédiger des scripts sous bash](https://debian-facile.org/doc:programmation:shells:debuter-avec-les-scripts-shell-bash)
 
 
-Architecture
+Architecture (with [uname](https://linuxhandbook.com/uname/))
 ```bash
 uname -a
 ```
 
-Kernel
+Kernel (with [uname](https://linuxhandbook.com/uname/))
 ```bash
 uname --kernel-release
 ```
-- Architecture of the operating system
+- Architecture of the operating system (with [uname](https://linuxhandbook.com/uname/))
 ```bash
 archi=$(uname -a)
 ```
-- number of physical processors.
+- number of physical processors (with [lscpu](https://www.howtoforge.com/linux-lscpu-command/))
 ```bash
-proc_phys=$(lscpu | grep 'CPU(s):' | awk '{print $2}')
+proc_phys=$(lscpu | grep 'CPU(s):' | awk '{print $2}') 
 ```
 - number of virtual processors
 ```bash
@@ -39,7 +39,7 @@ disk_percent=$(df --total | grep total | awk '{print $5}')
 ```bash
 cpu_use=$(top -bn1 | grep '%Cpu(s)' | awk '{printf("%.1f %%", $2 + $6)}')
 ```
-- date and time of last reboot
+- date and time of last reboot (WITH [who](https://www.man7.org/linux/man-pages/man1/who.1.html))
 ```bash
 last_boot=$(who --boot | awk '{print $3 " " $4}')
 ```
@@ -75,7 +75,7 @@ sudo_used=$(grep COMMAND /var/log/sudo/sudo.log | wc -l)
 - [awk](https://linux-man.fr/index.php/2020/08/08/commande-awk/)
 - [free](https://www.man7.org/linux/man-pages/man1/free.1.html)
 - [ifconfig](https://www.man7.org/linux/man-pages/man1/free.1.html)
-- [who](https://www.man7.org/linux/man-pages/man1/who.1.html)
+- 
 - [wc](https://www.man7.org/linux/man-pages/man1/wc.1.html)
 - [ip](https://www.man7.org/linux/man-pages/man8/ip.8.html)
 - [ss](https://www.man7.org/linux/man-pages/man8/ss.8.html), [cyberciti.biz](https://www.cyberciti.biz/tips/linux-investigate-sockets-network-connections.html)

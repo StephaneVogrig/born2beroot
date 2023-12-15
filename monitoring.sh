@@ -5,7 +5,7 @@ date=$(date)
 # Hardware
 
 archi=$(lscpu | grep Architecture | awk '{print $2}')
-proc_phys=$(lscpu | grep '^CPU(s):' | awk '{print $2}')
+proc_phys=$(lscpu | grep 'Socket(s):' | awk '{print $2}')
 proc_virt=$(nproc --all)
 cpu_use=$(top -bn1 | grep '%Cpu(s)' | awk '{printf("%.1f %%", $2 + $6)}')
 
@@ -37,44 +37,50 @@ users_logged=$(who --users | wc -l)
 
 # sudo
 
-sudo_users=$(getent group sudo | cut -d: -f4)
+sudo_users=$(getent group sudo | cut -d:$WHITE -f4)
 sudo_used=$(grep COMMAND /var/log/sudo/sudo.log | wc -l)
 
+# color
 
-wall --nobanner "
+GREEN="\e[0;32m"
+YELLOW="\e[1;33m"
+WHITE="\e[0;37m"
+PURPPLE="\e[1;35m"
+RESET="\033[0m"
 
-$date
-
-- Hardware ------------------------------------------------------------------
-
-    architecture       : $archi
-    Physical CPUs      : $proc_phys
-    Virtual CPUs       : $proc_virt
-    CPU usage          : $cpu_use
-    RAM usage          : $ram_used/$ram_total Mo ($ram_percent)
-    Disk usage         : $disk_used/$disk_total Go ($disk_percent)
-    LVM use            : $lvm_use
-    Last boot          : $last_boot
-
-- System --------------------------------------------------------------------
-
-    Operating system   : $os
-    kernel release     : $kernel_r
-    Kernel version     : $kernel_v
-
-- Network -------------------------------------------------------------------
-
-    Hostname           : $hostname
-    MAC adress         : $MAC
-    IPV4 adress        : $IPV4
-    TCP connection     : $tcp
-    Users logged       : $users_logged
-
-- Sudo ----------------------------------------------------------------------
-
-    Users              : $sudo_users
-    Sudo commands used : $sudo_used
-
------------------------------------------------------------------------------"
-
-
+echo "$YELLOW-----------------------------------------------------------------------------"
+echo ""
+echo "$PURPPLE                         $date"
+echo ""
+echo "$YELLOW- Hardware ------------------------------------------------------------------"
+echo ""
+echo "$GREEN    architecture       :$WHITE$WHITE $archi"
+echo "$GREEN    Physical CPUs      :$WHITE $proc_phys"
+echo "$GREEN    Virtual CPUs       :$WHITE $proc_virt"
+echo "$GREEN    CPU usage          :$WHITE $cpu_use"
+echo "$GREEN    RAM usage          :$WHITE $ram_used/$ram_total Mo ($ram_percent)"
+echo "$GREEN    Disk usage         :$WHITE $disk_used/$disk_total Go ($disk_percent)"
+echo "$GREEN    LVM use            :$WHITE $lvm_use"
+echo "$GREEN    Last boot          :$WHITE $last_boot"
+echo ""
+echo "$YELLOW- System --------------------------------------------------------------------"
+echo ""
+echo "$GREEN    Operating system   :$WHITE $os"
+echo "$GREEN    kernel release     :$WHITE $kernel_r"
+echo "$GREEN    Kernel version     :$WHITE $kernel_v"
+echo ""
+echo "$YELLOW- Network -------------------------------------------------------------------"
+echo ""
+echo "$GREEN    Hostname           :$WHITE $hostname"
+echo "$GREEN    MAC adress         :$WHITE $MAC"
+echo "$GREEN    IPV4 adress        :$WHITE $IPV4"
+echo "$GREEN    TCP connection     :$WHITE $tcp"
+echo "$GREEN    Users logged       :$WHITE $users_logged"
+echo ""
+echo "$YELLOW- Sudo ----------------------------------------------------------------------"
+echo ""
+echo "$GREEN    Users              :$WHITE $sudo_users"
+echo "$GREEN    Sudo commands used :$WHITE $sudo_used"
+echo ""
+echo "$YELLOW-----------------------------------------------------------------------------"
+echo "$RESET"
